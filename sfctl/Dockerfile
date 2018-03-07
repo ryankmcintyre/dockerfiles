@@ -7,10 +7,13 @@ RUN pip3 install virtualenv && \
     source sfctl/bin/activate && \
     pip3 install sfctl
 
-# Install TMUX
+# Install TMUX and copy files over
 RUN apk update && \
     apk add tmux
 
 COPY tmux.conf /root/.tmux.conf
+COPY setup-tmux.sh /root/setup-tmux.sh
+RUN chmod +x /root/setup-tmux.sh
 
-RUN echo -e "\n[[ -z \"$TMUX\" ]] && exec tmux" >> ~/.bashrc
+# Execute setup script on entry
+ENTRYPOINT /root/setup-tmux.sh
